@@ -1,6 +1,22 @@
-import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import "./globals.css";
+import { Poppins } from 'next/font/google';
+
+const inter = Inter({ subsets: ["latin"] });
+
+import { config } from '@fortawesome/fontawesome-svg-core'
+import '@fortawesome/fontawesome-svg-core/styles.css'
+config.autoAddCss = false
+
+const poppins = Poppins({
+  subsets: ['latin'],
+  weight: ['400', '600', '700'], // choose the weights you need
+  variable: '--font-poppins',   // optional: useful for custom properties
+});
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,8 +40,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={poppins.className}
       >
         {children}
       </body>
