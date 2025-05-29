@@ -13,13 +13,12 @@ interface itemProps{
     isCompleted: boolean,
     description: string,
     onDelete: (id: number) => void,
-    onComplete: (id: number) => void
 }
 
 
 const TodoItem = (props: itemProps) => {
     // props
-    const { name,id,isCompleted,description,onDelete,onComplete } = props
+    const { name,id,isCompleted,description,onDelete } = props
 
     const completed = useSelector (state => state?.complete.completed)
    
@@ -34,6 +33,8 @@ const TodoItem = (props: itemProps) => {
         if (currId.isCompleted){
             dispatch(addCompletedItem(currId))
             console.log(completed)
+        } else {
+            dispatch(removeCompletedItem(currId.id))
         }
         
     }

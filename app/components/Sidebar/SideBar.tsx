@@ -1,10 +1,13 @@
 "use client"
 import { useState } from "react";
 import { activate } from "@/app/redux/Modal/ModalActivation";
-import { useDispatch } from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
+import { activateTrig,deactivateTrig } from "@/app/redux/completed/TriggerShow";
 
 const SideBar = () => {
     const dispatch = useDispatch();
+    const trigger = useSelector(state => state?.triggerComp.showCompleted)
+    console.log(trigger);
   return (
     <div className="col-span-1 sideBarBg py-10 flex flex-col space-y-16">
 
@@ -30,7 +33,7 @@ const SideBar = () => {
         className="min-h-1/2 text-white flex flex-col justify-between gap-16">
 
             <p className={`listItemsEffect px-10 py-6 hover:cursor-pointer`}>All Tasks</p>
-            <p className={`listItemsEffect px-10 py-6 hover:cursor-pointer`}>Completed Tasks</p>
+            <p onClick={() => dispatch(activateTrig())} className={`listItemsEffect px-10 py-6 hover:cursor-pointer`}>Completed Tasks</p>
             <p className={`listItemsEffect px-10 py-6 hover:cursor-pointer`}>Uncompleted Tasks</p>
             <p className={`listItemsEffect px-10 py-6 hover:cursor-pointer`}>Favourite Tasks</p>
         </div>

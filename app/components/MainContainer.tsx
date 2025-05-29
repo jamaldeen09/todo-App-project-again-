@@ -21,10 +21,9 @@ const MainContainer = () => {
     // Task and description state management
     const taskName = useSelector(state => state?.taskName.name)
     const description = useSelector (state => state?.desc.description)
-
-    useEffect (() => {
-        console.log(taskName)
-    }, [])
+    const trigger = useSelector(state => state?.triggerComp.showCompleted)
+    const completed = useSelector (state => state?.complete.completed)
+    console.log(trigger);
 
     // handle addingTsk
     const addTask = () => {
@@ -80,9 +79,11 @@ const MainContainer = () => {
             <div className="w-full min-h-fit grid px-10 py-10 gap-10
             lg:grid-cols-3">
                 {
-                    container.map((todo: Payload) => {
-                        return <TodoItem onDelete={deleteTask} key={todo.id} name={todo.task} id={todo.id} isCompleted={todo.isCompleted} description={todo.description}/>
-                    })
+                   trigger ? completed.map((todo: Payload) => {
+                    return <TodoItem onDelete={deleteTask} key={todo.id} name={todo.task} id={todo.id} isCompleted={todo.isCompleted} description={todo.description}/>
+                   }) :  container.map((todo: Payload) => {
+                    return <TodoItem onDelete={deleteTask} key={todo.id} name={todo.task} id={todo.id} isCompleted={todo.isCompleted} description={todo.description}/>
+                })
                 }
             </div>
         </div>
