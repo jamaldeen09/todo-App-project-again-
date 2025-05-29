@@ -14,7 +14,11 @@ const completedSlice = createSlice({
     name: "complete",
     reducers: {
         addCompletedItem: (state, action: PayloadAction<Payload>) => {
-            state.completed.push(action.payload)
+            const exists = state.completed.some(item => item.id === action.payload.id);
+            
+            if (!exists) {
+                state.completed.push(action.payload);
+            }
         },
         removeCompletedItem: (state, action:PayloadAction<number>) => {
             state.completed = state.completed.filter ((item) => item.id !== action.payload)

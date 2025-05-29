@@ -1,13 +1,41 @@
 "use client"
-import { useState } from "react";
 import { activate } from "@/app/redux/Modal/ModalActivation";
 import { useDispatch,useSelector } from "react-redux";
 import { activateTrig,deactivateTrig } from "@/app/redux/completed/TriggerShow";
+import { activateAll,deactivateAll } from "@/app/redux/allTrigger/allTrig";
+import { activateFav,deactivateFav } from "@/app/redux/favourite/favTrigger"
+import { activateUncompleted,deactivateUncompleted } from "@/app/redux/uncompleted/uncompletedTrig";
 
 const SideBar = () => {
     const dispatch = useDispatch();
-    const trigger = useSelector(state => state?.triggerComp.showCompleted)
-    console.log(trigger);
+    
+    const completedTasksTrigger = () => {
+        dispatch(activateTrig())
+        dispatch(deactivateAll())
+        dispatch(deactivateFav())
+        dispatch(deactivateUncompleted())
+    }
+
+    const allTasksTrigger = () => {
+        dispatch(activateAll())
+        dispatch(deactivateTrig())
+        dispatch(deactivateFav())
+        dispatch(deactivateUncompleted())
+    }
+
+    const favouriteTasksTrigger = () => {
+        dispatch(activateFav())
+        dispatch(deactivateTrig())
+        dispatch(deactivateAll())
+        dispatch(deactivateUncompleted())
+    }
+
+    const uncompletedTrigger = () => {
+        dispatch(activateUncompleted())
+        dispatch(deactivateTrig())
+        dispatch(deactivateAll())
+        dispatch(deactivateFav())
+    }
   return (
     <div className="col-span-1 sideBarBg py-10 flex flex-col space-y-16">
 
@@ -31,11 +59,10 @@ const SideBar = () => {
         {/* List Items */}
         <div style={{listStyleType: "none"}} 
         className="min-h-1/2 text-white flex flex-col justify-between gap-16">
-
-            <p className={`listItemsEffect px-10 py-6 hover:cursor-pointer`}>All Tasks</p>
-            <p onClick={() => dispatch(activateTrig())} className={`listItemsEffect px-10 py-6 hover:cursor-pointer`}>Completed Tasks</p>
-            <p className={`listItemsEffect px-10 py-6 hover:cursor-pointer`}>Uncompleted Tasks</p>
-            <p className={`listItemsEffect px-10 py-6 hover:cursor-pointer`}>Favourite Tasks</p>
+            <p onClick={allTasksTrigger} className={`listItemsEffect px-10 py-6 hover:cursor-pointer`}>All Tasks</p>
+            <p onClick={completedTasksTrigger} className={`listItemsEffect px-10 py-6 hover:cursor-pointer`}>Completed Tasks</p>
+            <p onClick={uncompletedTrigger} className={`listItemsEffect px-10 py-6 hover:cursor-pointer`}>Uncompleted Tasks</p>
+            <p onClick={favouriteTasksTrigger} className={`listItemsEffect px-10 py-6 hover:cursor-pointer`}>Favourite Tasks</p>
         </div>
 
     

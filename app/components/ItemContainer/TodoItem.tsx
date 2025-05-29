@@ -3,8 +3,11 @@ import { faTrashCan,faStar,faEdit } from "@fortawesome/free-solid-svg-icons"
 import { useSelector,useDispatch } from "react-redux"
 import { removeItem, toggleComplete } from "@/app/redux/ToDo-Essentials/TodoReducer"
 import { Payload } from "@/app/redux/ToDo-Essentials/TodoReducer"
-import { useEffect } from "react"
+import { useState } from "react"
 import { addCompletedItem,removeCompletedItem } from "@/app/redux/completed/Completed"
+import { addFav,removeFav,toggleFavourite } from "@/app/redux/favourite/favourite"
+import { addUncompleted,removeUncompleted } from "@/app/redux/uncompleted/uncompleted"
+
 
 
 interface itemProps{
@@ -30,20 +33,47 @@ const TodoItem = (props: itemProps) => {
 
     const handleCompleted = (identifier: number) => {
         dispatch(toggleComplete(identifier))
-        if (currId.isCompleted){
-            dispatch(addCompletedItem(currId))
-            console.log(completed)
-        } else {
-            dispatch(removeCompletedItem(currId.id))
-        }
         
-    }
+        const updatedItem = {
+            ...currId,
+            isCompleted: !currId?.isCompleted,
+        };
     
+        if (updatedItem.isCompleted) {
+            dispatch(removeUncompleted(updatedItem.id));
+            dispatch(addCompletedItem(updatedItem));
+        } else {
+            dispatch(removeCompletedItem(updatedItem.id));
+            dispatch(addUncompleted(updatedItem))
+        }
+    }
+   
+    const favArr = useSelector(state => state?.favourite.favTasks);
+
+    const [ starStyles,setStarStyles ] = useState<boolean>(false);
+
+    const handleFavouriting = () => {
+    
+        dispatch(toggleFavourite(currId.id))
+        const updatedItem = {
+            ...currId,
+            isFavourite: !currId?.isFavourite
+        }
+        if (updatedItem.isFavourite) {
+           dispatch(addFav(updatedItem));
+           setStarStyles((prevStarStyles) => true);
+        } else {
+            dispatch(removeFav(updatedItem.id))
+            setStarStyles((prevStarStyles) => false);
+        }
+    }
+  
     // icons
     const trashCan = <FontAwesomeIcon onClick={() => onDelete(id)} className={`text-red-600 text-xl hover:scale-105 transition-all hover:brightness-75 hover:cursor-pointer`} icon={faTrashCan} />
-    const star = <FontAwesomeIcon  
+    const star = <FontAwesomeIcon 
+    onClick={handleFavouriting} 
     icon={faStar} 
-    className={`text-xl hover:scale-105 transition-all hover:cursor-pointer hover:brightness-75 
+    className={`${starStyles ? "text-yellow-500" : "text-black"} text-xl hover:scale-105 transition-all hover:cursor-pointer hover:brightness-75 
     `}/>
     const edit = <FontAwesomeIcon icon={faEdit} className={`text-xl hover:scale-105 transition-all hover:cursor-pointer hover:brightness-75`}/>
 

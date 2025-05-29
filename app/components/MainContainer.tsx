@@ -8,6 +8,11 @@ import { addItem,Payload,removeItem } from "../redux/ToDo-Essentials/TodoReducer
 import { useEffect,useState } from "react";
 import { nameTyping,resetName } from "../redux/ToDo-Essentials/NameSlice";
 import { descriptionTyping,resetDesc } from "../redux/ToDo-Essentials/Description";
+import { removeFav } from "../redux/favourite/favourite";
+import { removeCompletedItem } from "../redux/completed/Completed";
+import { removeUncompleted } from "../redux/uncompleted/uncompleted";
+
+
 
 
 const MainContainer = () => {
@@ -23,16 +28,22 @@ const MainContainer = () => {
     const description = useSelector (state => state?.desc.description)
     const trigger = useSelector(state => state?.triggerComp.showCompleted)
     const completed = useSelector (state => state?.complete.completed)
-    console.log(trigger);
+    const favouriteTrig = useSelector(state => state.favouriteTrigger.favTrig);
+
 
     // handle addingTsk
+    const unCompletedTrigger = useSelector(state => state.uncompletedTrigg.uncompletedTrigger)
     const addTask = () => {
+       
         const newTask = {
             task: taskName,
             isCompleted: false,
             id: container.length + 1,
             description: description,
+            isFavourite: false
         }
+
+       
         dispatch(addItem(newTask))
         dispatch(resetName())
         dispatch(resetDesc())
@@ -41,21 +52,34 @@ const MainContainer = () => {
 
     const [ addingTrigger,setAddingTrigger ] = useState<boolean>(false)
     useEffect (() => {
+        
         if (addingTrigger) {
             addTask();
+   
         }
     }, [addingTrigger])
 
     // handle deleting
     const deleteTask = (identifier: number) => {
         dispatch(removeItem(identifier))
+        dispatch(removeFav(identifier))
+        dispatch(removeCompletedItem(identifier))
+        dispatch(removeUncompleted(identifier))
     }
+
+    // state management for all and favourite array
+    const allTrigger = useSelector(state => state?.allTrig.allTrigger);
+    const favArr = useSelector(state => state?.favourite.favTasks);
+    const uncompletedArr = useSelector (state => state.uncompleted.uncompletedArr)
+
+    
   return (
     <div className="min-h-screen grid
     grid-cols-5">
        <Sidebar />
 
        {/* Main content */}
+       
         <div className="col-span-4 mainBg flex flex-col space-y-10">
 
             {/* Main Header */}
@@ -78,13 +102,20 @@ const MainContainer = () => {
             </div>
             <div className="w-full min-h-fit grid px-10 py-10 gap-10
             lg:grid-cols-3">
-                {
-                   trigger ? completed.map((todo: Payload) => {
+               
+               {
+                allTrigger ?  container.map((todo: Payload) => {
                     return <TodoItem onDelete={deleteTask} key={todo.id} name={todo.task} id={todo.id} isCompleted={todo.isCompleted} description={todo.description}/>
-                   }) :  container.map((todo: Payload) => {
+                }) : trigger ?  completed.map((todo: Payload) => {
+                    return <TodoItem onDelete={deleteTask} key={todo.id} name={todo.task} id={todo.id} isCompleted={todo.isCompleted} description={todo.description}/>
+                }) :  favouriteTrig ? favArr.map((todo: Payload) => {
+                    return <TodoItem onDelete={deleteTask} key={todo.id} name={todo.task} id={todo.id} isCompleted={todo.isCompleted} description={todo.description}/>
+                }) :  unCompletedTrigger ? uncompletedArr.map((todo: Payload) => {
+                    return <TodoItem onDelete={deleteTask} key={todo.id} name={todo.task} id={todo.id} isCompleted={todo.isCompleted} description={todo.description}/>
+                }) : container.map((todo: Payload) => {
                     return <TodoItem onDelete={deleteTask} key={todo.id} name={todo.task} id={todo.id} isCompleted={todo.isCompleted} description={todo.description}/>
                 })
-                }
+               }
             </div>
         </div>
 

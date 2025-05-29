@@ -12,6 +12,7 @@ export interface Payload {
     isCompleted: boolean,
     id: number,
     description:string,
+    isFavourite: boolean,
 }
 
 

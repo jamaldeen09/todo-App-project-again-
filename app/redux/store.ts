@@ -5,6 +5,11 @@ import nameSlice from "./ToDo-Essentials/NameSlice"
 import descriptionSlice from "./ToDo-Essentials/Description"
 import completedSlice from "./completed/Completed"
 import completedTriggerSlice from "./completed/TriggerShow"
+import favSlice from "./favourite/favourite"
+import allTrigSlice from "./allTrigger/allTrig"
+import favTrigSlice from "./favourite/favTrigger"
+import uncompletedSlice from "./uncompleted/uncompleted"
+import uncompletedTrigSlice from "./uncompleted/uncompletedTrig"
 
 
 
@@ -16,7 +21,12 @@ export const store = configureStore( {
         taskName: nameSlice,
         desc: descriptionSlice,
         complete: completedSlice,
-        triggerComp: completedTriggerSlice
+        triggerComp: completedTriggerSlice,
+        favourite: favSlice,
+        allTrig: allTrigSlice,
+        favouriteTrigger: favTrigSlice,
+        uncompleted: uncompletedSlice,
+        uncompletedTrigg: uncompletedTrigSlice
     }
 } )
 
