@@ -1,16 +1,9 @@
-import Nav from "./components/Nav"
-import Form from "./components/Form"
-import DisplayArea from "./components/DisplayArea"
 
-const page: React.FC = () => {
+import MainContainer from './components/MainContainer'
+
+const page = () => {
   return (
-    <>
-      <Nav />
-      <div className="min-h-screen flex justify-center items-center flex-col space-y-20">
-          <Form />
-          <DisplayArea />
-      </div>
-    </>
+    <MainContainer />
   )
 }
 
